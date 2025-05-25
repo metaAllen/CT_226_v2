@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員登入</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+        }
+        body {
+            width: 100vw;
+            min-height: 100dvh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            height: 100dvh;
+            min-height: 0;
+            background: rgba(34, 40, 49, 0.98);
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            overflow: hidden;
+            border: 1.5px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(4px);
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top);
+        }
+        .header {
+            width: 100%;
+            background: linear-gradient(90deg, #12214e 0%, #078282 100%);
+            color: white;
+            text-align: center;
+            padding: 20px 0 16px 0;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .form-container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #b0bec5;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: none;
+            background: #181c22;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: background 0.2s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            background: #23272f;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        .button-container button {
+            width: 100%;
+            padding: 15px 0;
+            background: linear-gradient(90deg, #12214e 0%, #078282 100%);
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,188,212,0.10);
+            transition: background 0.3s, transform 0.2s;
+        }
+        .button-container button:hover {
+            background: linear-gradient(90deg, #078282 0%, #12214e 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            color: #b0bec5;
+            font-size: 14px;
+        }
+        .switch-form a {
+            color: #00bcd4;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #ff867f;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .nav-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background: rgba(34, 40, 49, 0.98);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #b0bec5;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 8px;
+            transition: color 0.3s;
+            flex: 1;
+            text-align: center;
+        }
+        .nav-button.active {
+            color: #00bcd4;
+        }
+        .nav-button img {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        @media (max-width: 500px) {
+            .container {
+                max-width: 100vw;
+                height: 100dvh;
+                min-height: 0;
+                border-radius: 0;
+                padding-bottom: 60px;
+            }
+            .nav-buttons {
+                max-width: 100vw;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">會員登入</div>
+        <div class="form-container" id="formContainer">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">使用者名稱</label>
+                    <input type="text" id="username" placeholder="請輸入使用者名稱" required>
+                    <div class="error-message" id="usernameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="password">密碼</label>
+                    <input type="password" id="password" required>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                <div class="button-container">
+                    <button type="submit">登入</button>
+                </div>
+                <div class="switch-form">
+                    <div style="margin-bottom: 10px;">
+                        還沒有帳號？<a id="switchToRegister">立即註冊</a>
+                    </div>
+                    <div>
+                        <a id="forgotPassword">忘記密碼？</a>
+                    </div>
+                </div>
+            </form>
+
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label for="regUsername">使用者名稱</label>
+                    <input type="text" id="regUsername" placeholder="請輸入使用者名稱" required>
+                    <div class="error-message" id="regUsernameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">密碼</label>
+                    <input type="password" id="regPassword" required>
+                    <div class="error-message" id="regPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">確認密碼</label>
+                    <input type="password" id="confirmPassword" required>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+                <div class="button-container">
+                    <button type="submit">註冊</button>
+                </div>
+                <div class="switch-form">
+                    已有帳號？<a id="switchToLogin">立即登入</a>
+                </div>
+            </form>
+
+            <form id="forgotPasswordForm" style="display: none;">
+                <div class="form-group">
+                    <label for="forgotUsername">使用者名稱</label>
+                    <input type="text" id="forgotUsername" placeholder="請輸入使用者名稱" required>
+                    <div class="error-message" id="forgotUsernameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">新密碼</label>
+                    <input type="password" id="newPassword" required>
+                    <div class="error-message" id="newPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">確認新密碼</label>
+                    <input type="password" id="confirmNewPassword" required>
+                    <div class="error-message" id="confirmNewPasswordError"></div>
+                </div>
+                <div class="button-container">
+                    <button type="submit">重設密碼</button>
+                </div>
+                <div class="switch-form">
+                    <a id="backToLogin">返回登入</a>
+                </div>
+            </form>
+        </div>
+        <div class="profile-container" id="profileContainer" style="display:none; width:100%; padding:32px 20px 0 20px; box-sizing:border-box; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            <div style="width:100%; max-width:320px; background:rgba(255,255,255,0.05); border-radius:16px; padding:28px 18px; color:#fff; box-shadow:0 4px 16px rgba(0,0,0,0.1); border:1px solid rgba(255,255,255,0.08); text-align:center;">
+                <img src="../images/user.png" alt="會員頭像" style="width:64px;height:64px;border-radius:50%;background:#23272f;margin-bottom:12px;">
+                <h2 id="profileUsername" style="margin:0 0 8px 0;font-size:20px;color:#00bcd4;">會員名稱</h2>
+                <div style="font-size:15px;color:#b0bec5;margin-bottom:18px;">歡迎回來！</div>
+                <button id="logoutBtn" style="width:100%;padding:12px 0;background:linear-gradient(90deg,#12214e 0%,#078282 100%);border:none;font-size:16px;cursor:pointer;border-radius:10px;color:white;font-weight:bold;box-shadow:0 2px 8px rgba(0,188,212,0.10);transition:background 0.3s,transform 0.2s;">登出</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="#" class="nav-button">
+            <img src="../images/home.png" alt="首頁">
+            <span>首頁</span>
+        </a>
+        <a href="#" class="nav-button">
+            <img src="../images/stats.png" alt="統計">
+            <span>統計</span>
+        </a>
+        <a href="../chat/chat_v5_CT226.html" class="nav-button">
+            <img src="../images/chat.png" alt="聊天">
+            <span>聊天</span>
+        </a>
+        <a href="../membership/membership.html" class="nav-button active">
+            <img src="../images/user.png" alt="會員">
+            <span>會員</span>
+        </a>
+        <a href="../clendar/clendar.html" class="nav-button">
+            <img src="../images/calendar.png" alt="日曆">
+            <span>日曆</span>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            const switchToRegister = document.getElementById('switchToRegister');
+            const switchToLogin = document.getElementById('switchToLogin');
+            const forgotPassword = document.getElementById('forgotPassword');
+            const backToLogin = document.getElementById('backToLogin');
+            const header = document.querySelector('.header');
+            const formContainer = document.getElementById('formContainer');
+            const profileContainer = document.getElementById('profileContainer');
+            const profileUsername = document.getElementById('profileUsername');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            // 檢查是否已登入
+            function checkLogin() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    // 顯示會員資料
+                    formContainer.style.display = 'none';
+                    profileContainer.style.display = 'flex';
+                    profileUsername.textContent = currentUser;
+                } else {
+                    // 顯示登入/註冊表單
+                    formContainer.style.display = 'block';
+                    profileContainer.style.display = 'none';
+                }
+            }
+
+            // 登出
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('currentUser');
+                    checkLogin();
+                });
+            }
+
+            // 初始化用戶資料
+            function initUserData(username) {
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                if (!users[username]) {
+                    users[username] = {
+                        password: '',
+                        chatHistory: [],
+                        calendarEvents: {}
+                    };
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                return users[username];
+            }
+
+            // 切換表單顯示
+            switchToRegister.addEventListener('click', () => {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                forgotPasswordForm.style.display = 'none';
+                header.textContent = '會員註冊';
+            });
+
+            switchToLogin.addEventListener('click', () => {
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                forgotPasswordForm.style.display = 'none';
+                header.textContent = '會員登入';
+            });
+
+            forgotPassword.addEventListener('click', () => {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                forgotPasswordForm.style.display = 'block';
+                header.textContent = '重設密碼';
+            });
+
+            backToLogin.addEventListener('click', () => {
+                forgotPasswordForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                header.textContent = '會員登入';
+            });
+
+            // 登入表單提交
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // 重置錯誤訊息
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+                // 驗證用戶
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                if (!users[username] || users[username].password !== password) {
+                    document.getElementById('usernameError').textContent = '使用者名稱或密碼錯誤';
+                    document.getElementById('usernameError').style.display = 'block';
+                    return;
+                }
+
+                // 設置當前用戶
+                localStorage.setItem('currentUser', username);
+                
+                // 登入成功後跳轉到聊天頁面
+                window.location.href = '../chat/chat_v5_CT226.html';
+            });
+
+            // 註冊表單提交
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('regUsername').value;
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                // 重置錯誤訊息
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+                // 驗證密碼
+                if (password !== confirmPassword) {
+                    document.getElementById('confirmPasswordError').textContent = '密碼不一致';
+                    document.getElementById('confirmPasswordError').style.display = 'block';
+                    return;
+                }
+
+                // 檢查用戶名是否已存在
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                if (users[username]) {
+                    document.getElementById('regUsernameError').textContent = '此使用者名稱已被使用';
+                    document.getElementById('regUsernameError').style.display = 'block';
+                    return;
+                }
+
+                // 創建新用戶
+                users[username] = {
+                    password: password,
+                    chatHistory: [],
+                    calendarEvents: {}
+                };
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // 設置當前用戶
+                localStorage.setItem('currentUser', username);
+                
+                // 註冊成功後跳轉到聊天頁面
+                window.location.href = '../chat/chat_v5_CT226.html';
+            });
+
+            // 忘記密碼表單提交
+            forgotPasswordForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('forgotUsername').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+                // 重置錯誤訊息
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+                // 驗證密碼
+                if (newPassword !== confirmNewPassword) {
+                    document.getElementById('confirmNewPasswordError').textContent = '密碼不一致';
+                    document.getElementById('confirmNewPasswordError').style.display = 'block';
+                    return;
+                }
+
+                // 檢查用戶是否存在
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                if (!users[username]) {
+                    document.getElementById('forgotUsernameError').textContent = '使用者不存在';
+                    document.getElementById('forgotUsernameError').style.display = 'block';
+                    return;
+                }
+
+                // 更新密碼
+                users[username].password = newPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // 重設密碼成功後切換到登入表單
+                forgotPasswordForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                header.textContent = '會員登入';
+            });
+
+            // 檢查登入狀態
+            checkLogin();
+
+            // 設置當前頁面的導航按鈕為激活狀態
+            const currentPage = window.location.pathname;
+            document.querySelectorAll('.nav-button').forEach(button => {
+                if (button.getAttribute('href') === currentPage) {
+                    button.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
