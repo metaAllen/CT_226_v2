@@ -37,7 +37,7 @@
       backdrop-filter: blur(4px);
       box-sizing: border-box;
       padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+      position: relative;
     }
     .header {
       width: 100%;
@@ -55,7 +55,7 @@
       gap: 18px;
       position: relative;
       z-index: 2;
-      margin-bottom: 120px;
+      margin-bottom: 5px;
     }
     .header h2 {
       margin: 0;
@@ -82,6 +82,9 @@
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
+      padding-bottom: 80px;
+      margin-bottom: 0;
+      margin-top: 0px;
     }
     .day {
       background: rgba(255,255,255,0.08);
@@ -250,10 +253,14 @@
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      padding: 16px 12px 0 12px;
+      padding: 0 12px;
       background: transparent;
       box-sizing: border-box;
-      margin-bottom: calc(env(safe-area-inset-bottom) + 20px);
+      position: fixed;
+      bottom: 100px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
     }
     .calendar-actions button {
       flex: 1 1 0;
@@ -274,7 +281,7 @@
       transform: translateY(-2px) scale(1.04);
     }
     .nav-buttons {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
@@ -286,8 +293,6 @@
       backdrop-filter: blur(4px);
       z-index: 1000;
       width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
       box-sizing: border-box;
     }
     .nav-button {
@@ -324,12 +329,31 @@
       }
     }
     /* #modal { display: none !important; } */
+    /* 自定義滾動條樣式 */
+    .calendar-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    .calendar-container::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+    }
+    .calendar-container::-webkit-scrollbar-thumb {
+      background: rgba(0,188,212,0.3);
+      border-radius: 4px;
+    }
+    .calendar-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,188,212,0.5);
+    }
+    /* Firefox 滾動條樣式 */
+    .calendar-container {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,188,212,0.3) rgba(255,255,255,0.05);
+    }
   </style>
 </head>
 <body>
   <div class="calendar-container" style="position:relative;">
     <div class="header" style="position:relative;">
-      <button id="toChatBtn" aria-label="切換到聊天" style="position:absolute; left:16px; top:50%; transform:translateY(-50%); padding:8px 14px; border-radius:8px; background:linear-gradient(90deg, #12214e 0%, #078282 100%); color:#fff; font-weight:bold; border:none; cursor:pointer; font-size:20px;">&#8646;</button>
       <span style="display:block; width:100%; text-align:center; font-size:22px; font-weight:bold; letter-spacing:2px;" id="monthYear"></span>
     </div>
     <div class="calendar" id="calendar"></div>
@@ -337,6 +361,28 @@
       <button id="prevMonth">上個月</button>
       <button id="syncGarmin">同步 Garmin</button>
       <button id="nextMonth">下個月</button>
+    </div>
+    <div class="nav-buttons">
+      <a href="../index.html" class="nav-button">
+        <img src="../images/home.svg" alt="首頁">
+        <span>首頁</span>
+      </a>
+      <a href="../stats.html" class="nav-button">
+        <img src="../images/stats.svg" alt="統計">
+        <span>統計</span>
+      </a>
+      <a href="../chat/chat_v5_CT226.html" class="nav-button">
+        <img src="../images/chat.svg" alt="聊天">
+        <span>聊天</span>
+      </a>
+      <a href="../membership/membership.html" class="nav-button">
+        <img src="../images/user.svg" alt="會員">
+        <span>會員</span>
+      </a>
+      <a href="../clendar/clendar.html" class="nav-button active">
+        <img src="../images/calendar.svg" alt="日曆">
+        <span>日曆</span>
+      </a>
     </div>
   </div>
 
@@ -367,29 +413,6 @@
     </div>
   </div>
 
-  <div class="nav-buttons">
-    <a href="#" class="nav-button">
-      <img src="../images/home.png" alt="首頁">
-      <span>首頁</span>
-    </a>
-    <a href="#" class="nav-button">
-      <img src="../images/stats.png" alt="統計">
-      <span>統計</span>
-    </a>
-    <a href="../chat/chat_v5_CT226.html" class="nav-button">
-      <img src="../images/chat.png" alt="聊天">
-      <span>聊天</span>
-    </a>
-    <a href="../membership/membership.html" class="nav-button">
-      <img src="../images/user.png" alt="會員">
-      <span>會員</span>
-    </a>
-    <a href="../clendar/clendar.html" class="nav-button active">
-      <img src="../images/calendar.png" alt="日曆">
-      <span>日曆</span>
-    </a>
-  </div>
-
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       // DOM 元素
@@ -405,7 +428,6 @@
       const deleteActivity = document.getElementById("deleteActivity");
       const closeModal = document.getElementById("closeModal");
       const syncGarmin = document.getElementById("syncGarmin");
-      const toChatBtn = document.getElementById("toChatBtn");
 
       // 狀態管理
       let events = JSON.parse(localStorage.getItem('calendarEvents') || '{}');
@@ -626,11 +648,6 @@
           alert('同步失敗: ' + error.message);
         }
       });
-
-      // 切換到聊天
-      toChatBtn.onclick = function() {
-        window.location.href = '../chat/chat_v5_CT226.html';
-      };
 
       // 初始化日曆
       renderCalendar();

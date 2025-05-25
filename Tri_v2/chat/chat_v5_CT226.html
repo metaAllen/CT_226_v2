@@ -36,7 +36,7 @@
             backdrop-filter: blur(4px);
             box-sizing: border-box;
             padding-top: env(safe-area-inset-top);
-            padding-bottom: calc(env(safe-area-inset-bottom) + 60px);
+            position: relative;
         }
         .header {
             width: 100%;
@@ -61,6 +61,7 @@
             gap: 14px;
             border-bottom: 1px solid #2d3748;
             transition: background 0.3s;
+            padding-bottom: 20px;
         }
         .message {
             padding: 14px 18px;
@@ -179,7 +180,7 @@
             border-bottom: none;
             margin: 0;
             box-sizing: border-box;
-            margin-bottom: 90px;
+            margin-bottom: 150px;
         }
         .button-row button {
             flex: 1 1 0;
@@ -202,20 +203,18 @@
             transform: translateY(-2px) scale(1.04);
         }
         .nav-buttons {
-            position: fixed;
+            position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(34, 40, 49, 0.98);
             display: flex;
             justify-content: space-around;
             padding: 10px;
+            background: rgba(34, 40, 49, 0.98);
             border-top: 1px solid rgba(255,255,255,0.08);
             backdrop-filter: blur(4px);
             z-index: 1000;
             width: 100%;
-            max-width: 420px;
-            margin: 0 auto;
             box-sizing: border-box;
         }
         .nav-button {
@@ -258,6 +257,26 @@
                 border-radius: 0;
             }
         }
+        /* 自定義滾動條樣式 */
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-box::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+        .chat-box::-webkit-scrollbar-thumb {
+            background: rgba(0,188,212,0.3);
+            border-radius: 4px;
+        }
+        .chat-box::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,188,212,0.5);
+        }
+        /* Firefox 滾動條樣式 */
+        .chat-box {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,188,212,0.3) rgba(255,255,255,0.05);
+        }
     </style>
 </head>
 <body>
@@ -294,29 +313,28 @@
             <input type="text" id="message-input" placeholder="你今天運動了嗎?">
             <button id="send-button">➤</button>
         </div>
-    </div>
-
-    <div class="nav-buttons">
-        <a href="../index.html" class="nav-button">
-            <img src="../images/home.svg" alt="首頁">
-            <span>首頁</span>
-        </a>
-        <a href="../stats.html" class="nav-button">
-            <img src="../images/stats.svg" alt="統計">
-            <span>統計</span>
-        </a>
-        <a href="../chat/chat_v5_CT226.html" class="nav-button active">
-            <img src="../images/chat.svg" alt="聊天">
-            <span>聊天</span>
-        </a>
-        <a href="../membership/membership.html" class="nav-button">
-            <img src="../images/user.svg" alt="會員">
-            <span>會員</span>
-        </a>
-        <a href="../clendar/clendar.html" class="nav-button">
-            <img src="../images/calendar.svg" alt="日曆">
-            <span>日曆</span>
-        </a>
+        <div class="nav-buttons">
+            <a href="../index.html" class="nav-button">
+                <img src="../images/home.svg" alt="首頁">
+                <span>首頁</span>
+            </a>
+            <a href="../stats.html" class="nav-button">
+                <img src="../images/stats.svg" alt="統計">
+                <span>統計</span>
+            </a>
+            <a href="../chat/chat_v5_CT226.html" class="nav-button active">
+                <img src="../images/chat.svg" alt="聊天">
+                <span>聊天</span>
+            </a>
+            <a href="../membership/membership.html" class="nav-button">
+                <img src="../images/user.svg" alt="會員">
+                <span>會員</span>
+            </a>
+            <a href="../clendar/clendar.html" class="nav-button">
+                <img src="../images/calendar.svg" alt="日曆">
+                <span>日曆</span>
+            </a>
+        </div>
     </div>
 
     <script>

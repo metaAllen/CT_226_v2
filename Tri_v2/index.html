@@ -36,6 +36,7 @@
             backdrop-filter: blur(4px);
             box-sizing: border-box;
             padding-top: env(safe-area-inset-top);
+            position: relative;
         }
         .header {
             width: 100%;
@@ -52,11 +53,32 @@
             flex: 1;
             width: 100%;
             padding: 20px;
+            padding-bottom: 80px;
             box-sizing: border-box;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 20px;
+        }
+        /* 自定義滾動條樣式 */
+        .content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+        .content::-webkit-scrollbar-thumb {
+            background: rgba(0,188,212,0.3);
+            border-radius: 4px;
+        }
+        .content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,188,212,0.5);
+        }
+        /* Firefox 滾動條樣式 */
+        .content {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,188,212,0.3) rgba(255,255,255,0.05);
         }
         .card {
             background: rgba(255,255,255,0.05);
@@ -105,7 +127,7 @@
             color: #b0bec5;
         }
         .nav-buttons {
-            position: fixed;
+            position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
@@ -117,8 +139,6 @@
             backdrop-filter: blur(4px);
             z-index: 1000;
             width: 100%;
-            max-width: 420px;
-            margin: 0 auto;
             box-sizing: border-box;
         }
         .nav-button {
@@ -190,29 +210,28 @@
                 <p>完成 CT226 鐵人三項賽事</p>
             </div>
         </div>
-    </div>
-
-    <div class="nav-buttons">
-        <a href="index.html" class="nav-button active">
-            <img src="images/home.svg" alt="首頁">
-            <span>首頁</span>
-        </a>
-        <a href="stats.html" class="nav-button">
-            <img src="images/stats.svg" alt="統計">
-            <span>統計</span>
-        </a>
-        <a href="chat/chat_v5_CT226.html" class="nav-button">
-            <img src="images/chat.svg" alt="聊天">
-            <span>聊天</span>
-        </a>
-        <a href="membership/membership.html" class="nav-button">
-            <img src="images/user.svg" alt="會員">
-            <span>會員</span>
-        </a>
-        <a href="clendar/clendar.html" class="nav-button">
-            <img src="images/calendar.svg" alt="日曆">
-            <span>日曆</span>
-        </a>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button active">
+                <img src="images/home.svg" alt="首頁">
+                <span>首頁</span>
+            </a>
+            <a href="stats.html" class="nav-button">
+                <img src="images/stats.svg" alt="統計">
+                <span>統計</span>
+            </a>
+            <a href="chat/chat_v5_CT226.html" class="nav-button">
+                <img src="images/chat.svg" alt="聊天">
+                <span>聊天</span>
+            </a>
+            <a href="membership/membership.html" class="nav-button">
+                <img src="images/user.svg" alt="會員">
+                <span>會員</span>
+            </a>
+            <a href="clendar/clendar.html" class="nav-button">
+                <img src="images/calendar.svg" alt="日曆">
+                <span>日曆</span>
+            </a>
+        </div>
     </div>
 
     <script>
